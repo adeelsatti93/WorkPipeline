@@ -1,0 +1,97 @@
+@mixin btn-primary {
+  background-color: var(--wp-violet-600);
+  color: white;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  @include flex-center;
+  gap: 0.5rem;
+  user-select: none;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-sm);
+
+  &:hover:not(:disabled) {
+    background-color: var(--wp-violet-700);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin btn-text {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  @include flex-center;
+  gap: 0.5rem;
+
+  &:hover:not(:disabled) {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+@mixin card-hover {
+  @include card;
+  &:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-color-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@mixin table-style {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    padding: 1rem;
+    text-align: left;
+    background-color: var(--bg-table-header);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-table-row);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  tr:hover td {
+    background-color: var(--bg-table-row-hover);
+  }
+}

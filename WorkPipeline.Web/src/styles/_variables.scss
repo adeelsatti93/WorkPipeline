@@ -1,0 +1,79 @@
+:root {
+  // Brand / Product Colors
+  --wp-violet-50: #f5f3ff;
+  --wp-violet-100: #ede9fe;
+  --wp-violet-200: #ddd6fe;
+  --wp-violet-300: #c4b5fd;
+  --wp-violet-400: #a78bfa;
+  --wp-violet-500: #8b5cf6;
+  --wp-violet-600: #7c3aed;
+  --wp-violet-700: #6d28d9;
+  --wp-violet-800: #5b21b6;
+  --wp-violet-900: #4c1d95;
+
+  // Status Colors
+  --wp-danger: #e11d48;
+  --wp-danger-light: rgba(225, 29, 72, 0.2);
+  --wp-success: #16a34a;
+  --wp-success-light: rgba(22, 163, 74, 0.2);
+  --wp-warning: #ca8a04;
+  --wp-warning-light: rgba(202, 138, 4, 0.2);
+  --wp-info: #0ea5e9;
+  --wp-info-light: rgba(14, 165, 233, 0.2);
+  
+  // Progress bar
+  --wp-progress: #8b5cf6;
+
+  --border-radius: 12px;
+
+  // Dark Theme (default)
+  --bg-color: #09090b; // premium dark check
+  --bg-card: #18181b;
+  --bg-card-hover: #27272a;
+  --bg-card-active: #3f3f46;
+  
+  --bg-table-header: #18181b;
+  --bg-table-row: #09090b;
+  --bg-table-row-hover: #18181b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  --border-color: #27272a;
+  --border-color-hover: #3f3f46;
+
+  --input-bg: #18181b;
+  --input-border: #3f3f46;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] {
+  --bg-color: #f4f4f5;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafafa;
+  --bg-card-active: #f4f4f5;
+  
+  --bg-table-header: #f4f4f5;
+  --bg-table-row: #ffffff;
+  --bg-table-row-hover: #fafafa;
+  
+  --text-primary: #09090b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  
+  --border-color: #e4e4e7;
+  --border-color-hover: #d4d4d8;
+
+  --input-bg: #ffffff;
+  --input-border: #d4d4d8;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+$font-family: 'Inter', system-ui, -apple-system, sans-serif;

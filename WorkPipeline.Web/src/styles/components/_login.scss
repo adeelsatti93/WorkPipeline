@@ -1,0 +1,85 @@
+@use '../mixins' as *;
+
+.login-page {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  @include flex-center;
+  padding: 1rem;
+
+  .login-container {
+    width: 100%;
+    max-width: 24rem;
+
+    .login-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+
+      .logo-box {
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: var(--wp-violet-600);
+        border-radius: 1rem;
+        @include flex-center;
+        margin-bottom: 1rem;
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+      }
+
+      p {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+    }
+
+    .login-form {
+      @include card;
+      padding: 2rem;
+      
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-size: 0.875rem;
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+
+        input {
+          width: 100%;
+        }
+      }
+
+      .error-msg {
+        color: var(--wp-danger);
+        font-size: 0.875rem;
+        background-color: var(--wp-danger-light);
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+      }
+
+      .btn-submit {
+        @include btn-primary;
+        width: 100%;
+        margin-top: 0.5rem;
+        padding: 0.75rem;
+      }
+    }
+  }
+}

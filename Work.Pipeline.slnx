@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WorkPipeline.Api/WorkPipeline.Api.csproj" />
+  <Project Path="WorkPipeline.Core/WorkPipeline.Core.csproj" />
+  <Project Path="WorkPipeline.Infrastructure/WorkPipeline.Infrastructure.csproj" />
+  <Project Path="WorkPipeline.Tests/WorkPipeline.Tests.csproj" />
+</Solution>

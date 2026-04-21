@@ -1,0 +1,9 @@
+.vs/*
+WorkPipeline.Api/bin/*
+WorkPipeline.Api/obj/*
+WorkPipeline.Infrastructure/bin/*
+WorkPipeline.Infrastructure/obj/*
+WorkPipeline.Tests/bin/*
+WorkPipeline.Tests/obj/*
+WorkPipeline.Core/bin/*
+WorkPipeline.Core/obj/*
