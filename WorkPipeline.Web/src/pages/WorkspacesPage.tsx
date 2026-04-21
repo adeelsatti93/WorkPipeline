@@ -253,11 +253,10 @@ export default function WorkspacesPage() {
                 />
               )}
               {drawer.step === 'done' && (
-                <DoneStep
-                  workspaceId={drawer.workspaceId!}
-                  onClose={closeDrawer}
-                  onGoToTodos={() => { closeDrawer(); navigate(`/todos?workspaceId=${drawer.workspaceId}`); }}
-                />
+                  <DoneStep
+                    onClose={closeDrawer}
+                    onGoToTodos={() => { closeDrawer(); navigate(`/todos?workspaceId=${drawer.workspaceId}`); }}
+                  />
               )}
             </div>
           </div>
@@ -563,8 +562,8 @@ function ClaudeStep({ claudeKey, onChange, onSave, busy }: {
   );
 }
 
-function DoneStep({ workspaceId, onClose, onGoToTodos }: {
-  workspaceId: string; onClose: () => void; onGoToTodos: () => void;
+function DoneStep({ onClose, onGoToTodos }: {
+  onClose: () => void; onGoToTodos: () => void;
 }) {
   return (
     <div className="step-content done-step">

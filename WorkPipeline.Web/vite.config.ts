@@ -26,8 +26,8 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'https://localhost:7001',
-      '/hubs': { target: 'https://localhost:7001', ws: true },
+      '/api': 'https://localhost:7256',
+      '/hubs': { target: 'https://localhost:7256', ws: true },
     },
   },
 })

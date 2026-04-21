@@ -124,3 +124,11 @@ export interface SessionCompleteEvent {
   succeeded: number;
   failed: number;
 }
+export interface IntegrationStatus {
+  jiraConnected: boolean;
+  jiraBoardName?: string;
+  gitHubConnected: boolean;
+  gitHubRepo?: string;
+  gitHubBranch?: string;
+  claudeConnected: boolean;
+}

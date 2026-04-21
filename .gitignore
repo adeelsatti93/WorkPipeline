@@ -7,3 +7,4 @@ WorkPipeline.Tests/bin/*
 WorkPipeline.Tests/obj/*
 WorkPipeline.Core/bin/*
 WorkPipeline.Core/obj/*
+WorkPipeline.Api/wwwroot/*
