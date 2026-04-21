@@ -5,6 +5,7 @@ import WorkspacesPage from '../pages/WorkspacesPage';
 import TodoBoardPage from '../pages/TodoBoardPage';
 import ExecutionPage from '../pages/ExecutionPage';
 import ReviewBoardPage from '../pages/ReviewBoardPage';
+import SessionsPage from '../pages/SessionsPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((s) => s.token);
@@ -19,6 +20,7 @@ export default function AppRouter() {
       <Route path="/todos" element={<ProtectedRoute><TodoBoardPage /></ProtectedRoute>} />
       <Route path="/execution/:sessionId" element={<ProtectedRoute><ExecutionPage /></ProtectedRoute>} />
       <Route path="/review" element={<ProtectedRoute><ReviewBoardPage /></ProtectedRoute>} />
+      <Route path="/sessions" element={<ProtectedRoute><SessionsPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/workspaces" replace />} />
     </Routes>
   );

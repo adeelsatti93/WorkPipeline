@@ -18,8 +18,10 @@ export const workspacesApi = {
   // Jira
   getJiraBoards: (id: string, email: string, apiToken: string, siteUrl: string) =>
     api.get<JiraBoard[]>(`/workspaces/${id}/jira/boards`, { params: { email, apiToken, siteUrl } }).then(r => r.data),
-  saveJira: (id: string, email: string, apiToken: string, siteUrl: string, boardId: string, boardName: string) =>
-    api.post<Workspace>(`/workspaces/${id}/jira`, { email, apiToken, siteUrl, boardId, boardName }).then(r => r.data),
+  getJiraStatuses: (id: string, email: string, apiToken: string, siteUrl: string, boardId: string) =>
+    api.get<string[]>(`/workspaces/${id}/jira/statuses`, { params: { email, apiToken, siteUrl, boardId } }).then(r => r.data),
+  saveJira: (id: string, email: string, apiToken: string, siteUrl: string, boardId: string, boardName: string, inProgressStatus?: string, mergedStatus?: string) =>
+    api.post<Workspace>(`/workspaces/${id}/jira`, { email, apiToken, siteUrl, boardId, boardName, inProgressStatus, mergedStatus }).then(r => r.data),
 
   // Claude
   saveClaude: (id: string, apiKey: string) =>

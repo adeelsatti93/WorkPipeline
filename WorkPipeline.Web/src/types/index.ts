@@ -22,6 +22,8 @@ export interface Workspace {
   gitHubBranch?: string;
   jiraSiteUrl?: string;
   jiraBoardName?: string;
+  jiraInProgressStatus?: string;
+  jiraMergedStatus?: string;
   createdAt: string;
 }
 

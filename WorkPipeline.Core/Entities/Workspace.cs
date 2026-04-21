@@ -18,6 +18,10 @@ public class Workspace
     public string? JiraBoardId { get; set; }
     public string? JiraBoardName { get; set; }
 
+    // Jira status mappings (names vary per board)
+    public string? JiraInProgressStatus { get; set; }
+    public string? JiraMergedStatus { get; set; }
+
     // Claude
     public string? ClaudeApiKey { get; set; }
 

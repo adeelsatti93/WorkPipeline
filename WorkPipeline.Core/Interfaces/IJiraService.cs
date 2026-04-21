@@ -8,5 +8,6 @@ public interface IJiraService
     Task<List<JiraBoardDto>> GetBoardsAsync(string siteUrl, string base64Credentials);
     Task<List<JiraTicketDto>> GetTodoTicketsAsync(string siteUrl, string base64Credentials, string boardId, int maxResults = 100);
     Task<JiraTicketDto?> GetTicketAsync(string siteUrl, string base64Credentials, string key);
+    Task<List<string>> GetBoardStatusesAsync(string siteUrl, string base64Credentials, string boardId);
     Task TransitionTicketAsync(string siteUrl, string base64Credentials, string key, string targetStatusName);
 }

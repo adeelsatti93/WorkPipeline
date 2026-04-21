@@ -124,6 +124,8 @@ public class WorkspacesController(
         workspace.JiraSiteUrl = req.SiteUrl.TrimEnd('/');
         workspace.JiraBoardId = req.BoardId;
         workspace.JiraBoardName = req.BoardName;
+        workspace.JiraInProgressStatus = req.InProgressStatus;
+        workspace.JiraMergedStatus = req.MergedStatus;
         workspace.UpdatedAt = DateTime.UtcNow;
         await db.SaveChangesAsync();
         return Ok(MapDto(workspace));
@@ -139,6 +141,19 @@ public class WorkspacesController(
         var creds = jira.BuildCredentials(email, apiToken);
         var boards = await jira.GetBoardsAsync(siteUrl.TrimEnd('/'), creds);
         return Ok(boards);
+    }
+
+    [HttpGet("{id:guid}/jira/statuses")]
+    public async Task<IActionResult> GetJiraStatuses(Guid id,
+        [FromQuery] string email, [FromQuery] string apiToken, [FromQuery] string siteUrl, [FromQuery] string boardId)
+    {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(apiToken) ||
+            string.IsNullOrWhiteSpace(siteUrl) || string.IsNullOrWhiteSpace(boardId))
+            return BadRequest(new { message = "email, apiToken, siteUrl and boardId are required." });
+
+        var creds = jira.BuildCredentials(email, apiToken);
+        var statuses = await jira.GetBoardStatusesAsync(siteUrl.TrimEnd('/'), creds, boardId);
+        return Ok(statuses);
     }
 
     // ── Claude setup ──────────────────────────────────────────────────────────
@@ -171,6 +186,8 @@ public class WorkspacesController(
         w.GitHubBranch,
         w.JiraSiteUrl,
         w.JiraBoardName,
+        w.JiraInProgressStatus,
+        w.JiraMergedStatus,
         w.CreatedAt
     );
 }

@@ -108,6 +108,61 @@ public class JiraService(IHttpClientFactory httpClientFactory) : IJiraService
         );
     }
 
+    public async Task<List<string>> GetBoardStatusesAsync(string siteUrl, string base64Credentials, string boardId)
+    {
+        var client = GetClient(base64Credentials);
+        var base_ = siteUrl.TrimEnd('/');
+
+        // Fetch the board's sprint/column configuration to get real status names
+        var resp = await client.GetFromJsonAsync<JsonElement>(
+            $"{base_}/rest/agile/1.0/board/{boardId}/configuration");
+
+        var statuses = new List<string>();
+        if (resp.TryGetProperty("columnConfig", out var colConfig) &&
+            colConfig.TryGetProperty("columns", out var columns))
+        {
+            foreach (var col in columns.EnumerateArray())
+            {
+                if (col.TryGetProperty("statuses", out var colStatuses))
+                {
+                    foreach (var s in colStatuses.EnumerateArray())
+                    {
+                        if (s.TryGetProperty("id", out var sid))
+                        {
+                            // Resolve status name from id
+                            var statusId = sid.GetString();
+                            if (!string.IsNullOrEmpty(statusId))
+                            {
+                                try
+                                {
+                                    var statusResp = await client.GetFromJsonAsync<JsonElement>(
+                                        $"{base_}/rest/api/3/status/{statusId}");
+                                    if (statusResp.TryGetProperty("name", out var sname))
+                                        statuses.Add(sname.GetString()!);
+                                }
+                                catch { /* skip unresolvable statuses */ }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback: fetch all instance statuses if board config returned nothing
+        if (statuses.Count == 0)
+        {
+            var allStatuses = await client.GetFromJsonAsync<JsonElement[]>(
+                $"{base_}/rest/api/3/status");
+            if (allStatuses != null)
+                statuses.AddRange(allStatuses
+                    .Where(s => s.TryGetProperty("name", out _))
+                    .Select(s => s.GetProperty("name").GetString()!)
+                    .Where(n => !string.IsNullOrEmpty(n)));
+        }
+
+        return statuses.Distinct().ToList();
+    }
+
     public async Task TransitionTicketAsync(string siteUrl, string base64Credentials, string key, string targetStatusName)
     {
         var client = GetClient(base64Credentials);

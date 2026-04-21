@@ -56,7 +56,7 @@ export default function ExecutionPage() {
     onSuccess: (_, deletedId) => {
       qc.invalidateQueries({ queryKey: ['ticket-sessions'] });
       qc.invalidateQueries({ queryKey: ['workflow', 'sessions'] });
-      if (deletedId === sessionId) navigate('/');
+      if (deletedId === sessionId) navigate('/sessions');
     },
   });
 
@@ -103,8 +103,13 @@ export default function ExecutionPage() {
     streamEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chunks.length]);
 
+  const breadcrumbs = [
+    { label: 'Sessions', to: '/sessions' },
+    { label: session?.name ?? 'Session' },
+  ];
+
   return (
-    <Layout>
+    <Layout breadcrumbs={breadcrumbs}>
       <div className="execution-page">
         {/* Progress bar */}
         <div className="progress-section">

@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Layers, List, Play, ClipboardList, LogOut, Moon, Sun, Monitor, ChevronDown } from 'lucide-react';
+import { Layers, History, Play, ClipboardList, LogOut, Moon, Sun, Monitor, ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+
+export interface Breadcrumb {
+  label: string;
+  to?: string;
+}
 
 const navItems = [
   { to: '/workspaces', icon: Layers, label: 'Workspaces' },
-  { to: '/todos', icon: List, label: 'Todo Board' },
+  { to: '/sessions', icon: History, label: 'Sessions' },
   { to: '/review', icon: ClipboardList, label: 'Review Board' },
 ];
 
@@ -23,7 +28,7 @@ function resolveTheme(t: Theme): 'dark' | 'light' {
   return t;
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children, breadcrumbs }: { children: React.ReactNode; breadcrumbs?: Breadcrumb[] }) {
   const { logout, username } = useAuthStore();
   const navigate = useNavigate();
   const [theme, setTheme] = useState<Theme>(() =>
@@ -105,7 +110,37 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="layout-main">{children}</main>
+      {breadcrumbs && breadcrumbs.length > 0 && (
+    <div className="breadcrumb-bar">
+      {breadcrumbs.length > 1 && (
+        <button
+          className="back-btn"
+          onClick={() => {
+            const parent = breadcrumbs[breadcrumbs.length - 2];
+            if (parent.to) navigate(parent.to);
+            else navigate(-1);
+          }}
+          title="Go back"
+        >
+          <ArrowLeft size={14} />
+        </button>
+      )}
+      <nav className="breadcrumbs">
+        {breadcrumbs.map((crumb, i) => (
+          <span key={i} className="breadcrumb-item">
+            {i > 0 && <ChevronRight size={12} className="bc-sep" />}
+            {crumb.to && i < breadcrumbs.length - 1 ? (
+              <NavLink to={crumb.to} className="bc-link">{crumb.label}</NavLink>
+            ) : (
+              <span className="bc-current">{crumb.label}</span>
+            )}
+          </span>
+        ))}
+      </nav>
+    </div>
+  )}
+
+  <main className="layout-main">{children}</main>
     </div>
   );
 }

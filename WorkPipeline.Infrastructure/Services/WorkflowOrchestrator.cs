@@ -148,7 +148,8 @@ public class WorkflowOrchestrator(
             await db.SaveChangesAsync(cts.Token);
 
             // ── Step 7: Transition Jira ───────────────────────────────────────────
-            await jira.TransitionTicketAsync(workspace.JiraSiteUrl!, workspace.JiraCredentials!, ticket.JiraTicketKey, "In Progress");
+            var inProgressStatus = workspace.JiraInProgressStatus ?? "In Progress";
+            await jira.TransitionTicketAsync(workspace.JiraSiteUrl!, workspace.JiraCredentials!, ticket.JiraTicketKey, inProgressStatus);
             ticket.JiraTransitionedAt = DateTime.UtcNow;
             await db.SaveChangesAsync(cts.Token);
 

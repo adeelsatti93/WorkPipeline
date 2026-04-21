@@ -64,13 +64,14 @@ public class WebhooksController(
                     var ws = ticket.Session.Workspace;
                     if (ws.JiraSiteUrl != null && ws.JiraCredentials != null)
                     {
-                        await jira.TransitionTicketAsync(ws.JiraSiteUrl, ws.JiraCredentials, ticket.JiraTicketKey, "Done");
+                        var mergedStatus = ws.JiraMergedStatus ?? "Done";
+                        await jira.TransitionTicketAsync(ws.JiraSiteUrl, ws.JiraCredentials, ticket.JiraTicketKey, mergedStatus);
                         ticket.JiraTransitionedAt = DateTime.UtcNow;
                         await db.SaveChangesAsync();
                     }
 
                     await hub.Clients.Group($"session:{ticket.SessionId}").SendAsync("JiraUpdated",
-                        new { ticketWorkId = ticket.Id, newJiraStatus = "Done" });
+                        new { ticketWorkId = ticket.Id, newJiraStatus = ws.JiraMergedStatus ?? "Done" });
                     await hub.Clients.Group($"session:{ticket.SessionId}").SendAsync("TicketStatusChanged",
                         new { ticketWorkId = ticket.Id, jiraKey = ticket.JiraTicketKey, status = "Merged" });
                 }

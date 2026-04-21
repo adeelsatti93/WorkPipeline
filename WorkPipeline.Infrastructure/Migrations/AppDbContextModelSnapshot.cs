@@ -224,6 +224,12 @@ namespace WorkPipeline.Infrastructure.Migrations
                     b.Property<string>("JiraEmail")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("JiraInProgressStatus")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("JiraMergedStatus")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("JiraSiteUrl")
                         .HasColumnType("TEXT");
 

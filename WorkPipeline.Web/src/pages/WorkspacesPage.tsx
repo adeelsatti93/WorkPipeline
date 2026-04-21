@@ -27,6 +27,9 @@ interface DrawerState {
   jiraSiteUrl: string;
   jiraBoards: JiraBoard[];
   selectedBoard: JiraBoard | null;
+  jiraStatuses: string[];
+  jiraInProgressStatus: string;
+  jiraMergedStatus: string;
   // claude
   claudeKey: string;
 }
@@ -36,6 +39,7 @@ const EMPTY_DRAWER: DrawerState = {
   step: 'name',
   ghToken: '', repos: [], selectedRepo: null, branches: [], selectedBranch: '', localPath: '',
   jiraEmail: '', jiraToken: '', jiraSiteUrl: '', jiraBoards: [], selectedBoard: null,
+  jiraStatuses: [], jiraInProgressStatus: '', jiraMergedStatus: '',
   claudeKey: '',
 };
 
@@ -131,11 +135,33 @@ export default function WorkspacesPage() {
     finally { setBusy(false); }
   };
 
+  const handleBoardSelected = async (boardId: string) => {
+    if (!drawer?.workspaceId) return;
+    const board = drawer.jiraBoards.find(b => b.id === boardId) ?? null;
+    setDrawer(d => d ? { ...d, selectedBoard: board, jiraStatuses: [], jiraInProgressStatus: '', jiraMergedStatus: '' } : d);
+    if (!board) return;
+    setBusy(true);
+    try {
+      const statuses = await workspacesApi.getJiraStatuses(drawer.workspaceId, drawer.jiraEmail, drawer.jiraToken, drawer.jiraSiteUrl, boardId);
+      // Pick sensible defaults if names match
+      const inProgress = statuses.find(s => /in.?progress/i.test(s)) ?? statuses[0] ?? '';
+      const merged = statuses.find(s => /done|merged|closed|complete/i.test(s)) ?? statuses[statuses.length - 1] ?? '';
+      setDrawer(d => d ? { ...d, jiraStatuses: statuses, jiraInProgressStatus: inProgress, jiraMergedStatus: merged } : d);
+    } catch {
+      toast('Could not fetch board statuses — you can set them manually.', { icon: '⚠️' });
+    } finally { setBusy(false); }
+  };
+
   const handleSaveJira = async () => {
     if (!drawer?.workspaceId || !drawer.selectedBoard) { toast.error('Select a board.'); return; }
     setBusy(true);
     try {
-      await workspacesApi.saveJira(drawer.workspaceId, drawer.jiraEmail, drawer.jiraToken, drawer.jiraSiteUrl, drawer.selectedBoard.id, drawer.selectedBoard.name);
+      await workspacesApi.saveJira(
+        drawer.workspaceId, drawer.jiraEmail, drawer.jiraToken, drawer.jiraSiteUrl,
+        drawer.selectedBoard.id, drawer.selectedBoard.name,
+        drawer.jiraInProgressStatus || undefined,
+        drawer.jiraMergedStatus || undefined,
+      );
       qc.invalidateQueries({ queryKey: ['workspaces'] });
       setDrawer(d => d ? { ...d, step: 'claude' } : d);
       toast.success('Jira configured!');
@@ -240,6 +266,7 @@ export default function WorkspacesPage() {
                   state={drawer}
                   onChange={(patch) => setDrawer(d => d ? { ...d, ...patch } : d)}
                   onLoadBoards={handleLoadBoards}
+                  onBoardSelected={handleBoardSelected}
                   onSave={handleSaveJira}
                   busy={busy}
                 />
@@ -471,10 +498,11 @@ function GitHubStep({ state, onChange, onLoadRepos, onSelectRepo, onSave, busy }
   );
 }
 
-function JiraStep({ state, onChange, onLoadBoards, onSave, busy }: {
+function JiraStep({ state, onChange, onLoadBoards, onBoardSelected, onSave, busy }: {
   state: DrawerState;
   onChange: (patch: Partial<DrawerState>) => void;
   onLoadBoards: () => void;
+  onBoardSelected: (boardId: string) => void;
   onSave: () => void;
   busy: boolean;
 }) {
@@ -484,6 +512,8 @@ function JiraStep({ state, onChange, onLoadBoards, onSave, busy }: {
     sublabel: b.projectKey ?? undefined,
     badge: b.boardType ?? undefined,
   }));
+
+  const statusOptions = state.jiraStatuses.map(s => ({ value: s, label: s }));
 
   return (
     <div className="step-content">
@@ -527,11 +557,37 @@ function JiraStep({ state, onChange, onLoadBoards, onSave, busy }: {
           <SearchableSelect
             options={boardOptions}
             value={state.selectedBoard?.id ?? ''}
-            onChange={v => onChange({ selectedBoard: state.jiraBoards.find(b => b.id === v) ?? null })}
+            onChange={onBoardSelected}
             placeholder="Search boards by name or project key…"
             emptyMessage="No boards match your search"
           />
         </div>
+      )}
+
+      {state.selectedBoard && state.jiraStatuses.length > 0 && (
+        <>
+          <p className="helper-text" style={{ marginTop: '12px' }}>
+            Map your board's statuses to workflow events:
+          </p>
+          <div className="form-field">
+            <label>When PR is created → move ticket to</label>
+            <SearchableSelect
+              options={statusOptions}
+              value={state.jiraInProgressStatus}
+              onChange={v => onChange({ jiraInProgressStatus: v })}
+              placeholder="Select status…"
+            />
+          </div>
+          <div className="form-field">
+            <label>When PR is merged → move ticket to</label>
+            <SearchableSelect
+              options={statusOptions}
+              value={state.jiraMergedStatus}
+              onChange={v => onChange({ jiraMergedStatus: v })}
+              placeholder="Select status…"
+            />
+          </div>
+        </>
       )}
 
       <button onClick={onSave} disabled={busy || !state.selectedBoard} className="btn-primary">

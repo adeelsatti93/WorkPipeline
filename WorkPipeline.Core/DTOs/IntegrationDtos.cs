@@ -18,6 +18,8 @@ public record WorkspaceDto(
     string? GitHubBranch,
     string? JiraSiteUrl,
     string? JiraBoardName,
+    string? JiraInProgressStatus,
+    string? JiraMergedStatus,
     DateTime CreatedAt
 );
 
@@ -33,7 +35,9 @@ public record SaveWorkspaceJiraRequest(
     string ApiToken,
     string SiteUrl,
     string BoardId,
-    string BoardName
+    string BoardName,
+    string? InProgressStatus,
+    string? MergedStatus
 );
 
 public record SaveWorkspaceClaudeRequest(string ApiKey);

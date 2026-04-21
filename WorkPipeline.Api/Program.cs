@@ -11,7 +11,7 @@ using WorkPipeline.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── EF Core / SQLite ───────────────────────────────────────────────────────────
-var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "workpipeline.db");
+var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "workpipeline.db");
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite($"Data Source={dbPath}"));
 
 // ── JWT Auth ───────────────────────────────────────────────────────────────────
@@ -65,6 +65,7 @@ builder.Services.AddScoped<IClaudeCodeService, ClaudeCodeService>();
 builder.Services.Configure<WorkflowOptions>(builder.Configuration.GetSection("Workflow"));
 builder.Services.AddScoped<WorkflowOrchestrator>();
 builder.Services.AddHostedService<TicketQueueProcessor>();
+builder.Services.AddHostedService<PrStatusPollingService>();
 
 builder.Services.AddControllers();
 

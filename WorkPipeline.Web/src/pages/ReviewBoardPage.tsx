@@ -19,10 +19,12 @@ export default function ReviewBoardPage() {
     refetchInterval: 10_000,
   });
 
-  if (isLoading) return <Layout><div className="text-slate-400">Loading board…</div></Layout>;
+  const breadcrumbs = [{ label: 'Review Board' }];
+
+  if (isLoading) return <Layout breadcrumbs={breadcrumbs}><div className="text-slate-400">Loading board…</div></Layout>;
 
   return (
-    <Layout>
+    <Layout breadcrumbs={breadcrumbs}>
       <div className="review-board container mt-6">
         <h1 className="page-heading">Review Board</h1>
         <div className="board-grid">
