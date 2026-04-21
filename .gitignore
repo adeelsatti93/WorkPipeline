@@ -8,3 +8,4 @@ WorkPipeline.Tests/obj/*
 WorkPipeline.Core/bin/*
 WorkPipeline.Core/obj/*
 WorkPipeline.Api/wwwroot/*
+*.db

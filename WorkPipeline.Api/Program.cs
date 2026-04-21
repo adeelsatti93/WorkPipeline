@@ -11,10 +11,7 @@ using WorkPipeline.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── EF Core / SQLite ───────────────────────────────────────────────────────────
-var dbPath = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-    "WorkPipeline", "workpipeline.db");
-Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
+var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "workpipeline.db");
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite($"Data Source={dbPath}"));
 
 // ── JWT Auth ───────────────────────────────────────────────────────────────────
